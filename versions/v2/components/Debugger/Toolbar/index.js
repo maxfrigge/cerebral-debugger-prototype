@@ -32,6 +32,11 @@ class Toolbar extends React.Component {
               onClick={() => this.props.signals.debugger.pageChanged({page: 'model'})}>
               <i className={icons.model}/> MODEL
             </li>
+            <li
+              className={this.props.currentPage === 'graph' ? styles.activeTab : styles.tab}
+              onClick={() => this.props.signals.debugger.pageChanged({page: 'graph'})}>
+              <i className={icons.graph}/> GRAPH
+            </li>
             <li className={styles.rightItem}>
               <button
                 onClick={() => this.onDisableDebuggerClick()}

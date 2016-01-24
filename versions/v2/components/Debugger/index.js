@@ -6,10 +6,12 @@ import styles from './styles.css';
 import Toolbar from './Toolbar';
 import Signals from './Signals';
 import Model from './Model';
+import Graph from './Graph';
 
 const pages = {
   signals: Signals,
-  model: Model
+  model: Model,
+  graph: Graph
 };
 
 @Cerebral({
