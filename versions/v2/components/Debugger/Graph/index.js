@@ -1,7 +1,7 @@
 import React from 'react'
 import {Decorator as Cerebral} from 'cerebral-view-react'
 import {signalToColors} from 'common/utils';
-import styles from './styles.css'
+import styles from './index.css'
 import Signal from './Signal'
 
 @Cerebral({
@@ -27,16 +27,36 @@ class Graph extends React.Component {
       }
     }, {clock: 0, signals: []})
 
-    console.log('Signal graph', graph)
+    // @TODO: Get rid of that freaking window.innerWidth!!
+    const signalsWidth = (graph.clock - 1) * 20 - 19
+    const scrollPos = window.innerWidth / 2 - signalsWidth - 17;
+    const signalGroup = {
+      transform: `translate(${scrollPos}px, 2px)`
+    }
 
     return (
       <div className={styles.container}>
-        <svg width='100%' height='300px'>
-          {
-            graph.signals.map(
-              (signal, index) => <Signal key={signal.id} signal={signal} />
-            )
-          }
+        <svg width='100%' height='80px'>
+          <g>
+            <rect
+              className={ styles.nowIndicator }
+              x='50%'
+            />
+            <text
+              className={ styles.nowLabel }
+              x='50%'
+              y="98%"
+            >
+              NOW
+            </text>
+          </g>
+          <g style={ signalGroup }>
+            {
+              graph.signals.map(
+                (signal, index) => <Signal key={signal.id} signal={signal} />
+              )
+            }
+          </g>
         </svg>
       </div>
     );
@@ -86,7 +106,6 @@ function compareEventTypes (a, b) {
 
 function startSignal (startEvent, graph) {
   const lastSignal = getLastSignal(graph)
-  console.log(lastSignal, startEvent.signal.name)
   if (lastSignal && lastSignal.name === startEvent.signal.name) {
     lastSignal.count += 1
     return graph
@@ -133,7 +152,7 @@ function endSignal (endEvent, graph) {
     const runningSignal = findRunningSignal(graph)
     if (runningSignal) {
       graph.clock += 1
-    }  
+    }
   }
 
   return graph

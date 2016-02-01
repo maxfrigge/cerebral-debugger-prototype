@@ -1,0 +1,19 @@
+.container {
+  width: 100%;
+}
+
+.nowIndicator {
+  transform: translate(-19px);
+  width: 38px;
+  height: 100%;
+  fill: rgba(0,0,0,0.1);
+}
+
+.nowLabel {
+  fill: white;
+  text-anchor: middle;
+  font-size: 13px;
+  font-weight: bold;
+  pointer-events: none;
+  -webkit-user-select: none;
+}
