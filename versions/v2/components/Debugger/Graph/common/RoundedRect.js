@@ -23,7 +23,7 @@ export default function RoundedRect (props) {
   Z`
 
   return (
-    <path d={ path } className={ props.className } />
+    <path d={ path } className={ props.className } style={props.style} />
   )
 }
 

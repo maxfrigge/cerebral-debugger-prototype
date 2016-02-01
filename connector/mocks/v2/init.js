@@ -22,7 +22,7 @@ module.exports = {
     "signals": [
       {
         "name": "app.whatpha.heahe.eheaehhaeheaheaaheaehaehaehaehaheaehaehaheheaheh",
-        "start": 1452960398493,
+        "start": 1452960398393,
         "isSync": true,
         "isExecuting": false,
         "branches": [

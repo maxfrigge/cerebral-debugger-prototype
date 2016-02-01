@@ -1,11 +1,12 @@
 import React from 'react'
 import {Decorator as Cerebral} from 'cerebral-view-react'
+import {signalToColors} from 'common/utils';
 import styles from './styles.css'
 import Signal from './Signal'
 
 @Cerebral({
   signalLog: ['debugger', 'signals'],
-  signals: ['debugger', 'currentApp', 'signals']
+  signalDefinitions: ['debugger', 'currentApp', 'signals']
 })
 class Graph extends React.Component {
   render() {
@@ -26,14 +27,14 @@ class Graph extends React.Component {
       }
     }, {clock: 0, signals: []})
 
-    console.log(graph)
+    console.log('Signal graph', graph)
 
     return (
       <div className={styles.container}>
         <svg width='100%' height='300px'>
           {
             graph.signals.map(
-              (signal, index) => <Signal key={index} signal={signal} /> // TODO: Use signal.id as key
+              (signal, index) => <Signal key={signal.id} signal={signal} />
             )
           }
         </svg>
@@ -43,16 +44,19 @@ class Graph extends React.Component {
 }
 
 function createControllerEvents (signals) {
-  let result = [...signals].reverse()
-  console.log(result);
-  result = result.reduce((stream, signal) => {
+  // console.log('signals', signals)
+  let result = signals
+  .slice()
+  .reverse()
+  .reduce((stream, signal) => {
     stream.push({type: 'signal_start', signal: signal})
     stream.push({type: 'signal_end', signal: signal})
+    // stream.push({type: 'change', signal: signal})
     return stream
   }, [])
-  console.log(result)
-  result = result.sort(compareEvents)
-  console.log(result)
+  .sort(compareEvents)
+
+  // console.log('events', result)
 
   return result
 }
@@ -61,7 +65,7 @@ function compareEvents(a, b) {
   let timeA = a.type === 'signal_start' ? a.signal.start : a.signal.end
   let timeB = b.type === 'signal_start' ? b.signal.start : b.signal.end
   let result = compareNumbers(timeA, timeB)
-  return result ? result : compareEventType(a,b)
+  return result ? result : compareEventTypes(a,b)
 }
 
 function compareNumbers(a, b) {
@@ -70,7 +74,7 @@ function compareNumbers(a, b) {
   return 0
 }
 
-function compareEventType (a, b) {
+function compareEventTypes (a, b) {
   if (a.type === 'signal_start' && b.type === 'signal_end') {
     return -1
   }
@@ -81,6 +85,13 @@ function compareEventType (a, b) {
 }
 
 function startSignal (startEvent, graph) {
+  const lastSignal = getLastSignal(graph)
+  console.log(lastSignal, startEvent.signal.name)
+  if (lastSignal && lastSignal.name === startEvent.signal.name) {
+    lastSignal.count += 1
+    return graph
+  }
+
   const signal = {
     id: startEvent.signal.id,
     start: graph.clock,
@@ -88,7 +99,10 @@ function startSignal (startEvent, graph) {
     actions: [],
     concurrency: 0,
     actionConcurrency: 0,
-    running: true
+    running: true,
+    count: 1,
+    name: startEvent.signal.name,
+    colors: signalToColors(startEvent.signal)
   }
 
   const runningSignal = findRunningSignal(graph)
@@ -105,13 +119,21 @@ function startSignal (startEvent, graph) {
 
 function endSignal (endEvent, graph) {
   const signal = findSignal(graph, endEvent.signal.id)
-  signal.end = graph.clock
-  signal.running = false
-  signal.duration = signal.end - signal.start
 
-  const runningSignal = findRunningSignal(graph)
-  if (runningSignal) {
-    graph.clock += 1
+  if (signal) {
+    signal.end = graph.clock
+    signal.running = false
+    signal.duration = signal.end - signal.start
+
+    if (signal.duration < 2) {
+      graph.clock += 2 - signal.duration
+      signal.duration = 2
+    }
+
+    const runningSignal = findRunningSignal(graph)
+    if (runningSignal) {
+      graph.clock += 1
+    }  
   }
 
   return graph
@@ -123,6 +145,14 @@ function findSignal (graph, signalId) {
 
 function findRunningSignal (graph) {
   return graph.signals.reverse().find(signal => signal.running)
+}
+
+function getLastSignal (graph) {
+  if (graph.signals.length) {
+    return graph.signals[0]
+  }
+
+  return null
 }
 
 // function startAction (startEvent, graph) {

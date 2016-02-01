@@ -1,3 +1,12 @@
 .signal {
-  fill: red;
+
+}
+
+.label {
+  dominant-baseline: central;
+  text-anchor: middle;
+  font-size: 12px;
+  font-weight: bold;
+  pointer-events: none;
+  -webkit-user-select: none;
 }

@@ -66,6 +66,12 @@ function fnv32aHash(str) {
   return hval >>> 0;
 }
 
+export function signalToColors(signal) {
+  const namePath = signal.name.split('.');
+  const name = namePath.pop();
+  return nameToColors(namePath.join('.'), name);
+}
+
 export function nameToColors(moduleName, signalName, maxDarken=-0.4, maxLighten=0.8) {
   const colors = [
     '#E91E63', //Pink

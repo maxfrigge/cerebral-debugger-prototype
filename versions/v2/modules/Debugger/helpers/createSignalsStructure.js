@@ -3,17 +3,23 @@ function createSignalsStructure(initialSignals) {
   const path = [];
 
   function createSignalDefinition(signal) {
-    return {
+    const signalDefinition = {
       path: path.slice(),
       name: signal.name,
-      id: Symbol(signal.name),
+      id: path.join('_'),
       start: signal.start,
-      end: getSignalEnd(signal.start, signal.branches),
+      end: signal.end,
       isSync: !!signal.isSync,
       isRouted: !!signal.isRouted,
       isWithinExecution: initialSignals.indexOf(signal) === -1,
       isExecuting: signal.isExecuting
     };
+
+    if (!signal.hasOwnProperty('end')) {
+      signalDefinition.end = getSignalEnd(signal.start, signal.branches);
+    }
+
+    return signalDefinition;
   }
 
   function getSignalEnd(time, branches) {

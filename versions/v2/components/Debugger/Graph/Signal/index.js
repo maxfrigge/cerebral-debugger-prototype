@@ -11,10 +11,19 @@ export default function Signal ({signal}) {
 
   let rightRadius = signal.running ? 0 : 8
 
+  const backgroundStyle = {
+    fill: signal.colors.backgroundColor
+  }
+
+  const labelStyle = {
+    fill: signal.colors.textColor
+  }
+
   return (
-    <g className={ styles.group }>
+    <g>
       <RoundedRect
         className={ styles.signal }
+        style={ backgroundStyle }
         x={ x }
         y={ y }
         width={ width }
@@ -24,6 +33,14 @@ export default function Signal ({signal}) {
         bottomRightRadius={ rightRadius }
         bottomLeftRadius={ 8 }
       />
+      <text
+        className={ styles.label }
+        style={ labelStyle }
+        x={ x + width / 2 }
+        y={ y + height / 2 }
+      >
+        { signal.count }
+      </text>
       {
         // signal.actions.map(
         //   action => <Action key={action.id} signal={signal} action={action} />
