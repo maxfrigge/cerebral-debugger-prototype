@@ -19,6 +19,8 @@ export default function Signal ({signal}) {
     fill: signal.colors.textColor
   }
 
+  let labelText = signal.count > 1 ? signal.count : '...'
+
   return (
     <g>
       <RoundedRect
@@ -39,7 +41,7 @@ export default function Signal ({signal}) {
         x={ x + width / 2 }
         y={ y + height / 2 }
       >
-        { signal.count }
+        { labelText }
       </text>
       {
         // signal.actions.map(
