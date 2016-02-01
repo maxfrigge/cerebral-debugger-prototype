@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.css'
-import Action from '../Action'
+// import Action from '../Action'
 import RoundedRect from '../common/RoundedRect'
 
 export default function Signal ({signal}) {
@@ -25,9 +25,9 @@ export default function Signal ({signal}) {
         bottomLeftRadius={ 8 }
       />
       {
-        signal.actions.map(
-          action => <Action key={action.id} signal={signal} action={action} />
-        )
+        // signal.actions.map(
+        //   action => <Action key={action.id} signal={signal} action={action} />
+        // )
       }
     </g>
   )

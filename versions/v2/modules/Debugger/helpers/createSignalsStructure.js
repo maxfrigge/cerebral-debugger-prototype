@@ -6,12 +6,25 @@ function createSignalsStructure(initialSignals) {
     return {
       path: path.slice(),
       name: signal.name,
-      id: signal.start,
+      id: Symbol(signal.name),
+      start: signal.start,
+      end: getSignalEnd(signal.start, signal.branches),
       isSync: !!signal.isSync,
       isRouted: !!signal.isRouted,
       isWithinExecution: initialSignals.indexOf(signal) === -1,
       isExecuting: signal.isExecuting
     };
+  }
+
+  function getSignalEnd(time, branches) {
+    for (const branch of branches) {
+      if (Array.isArray(branch)) {
+        return getSignalEnd(time, branch);
+      }
+      time += branch.duration;
+    }
+
+    return time;
   }
 
   function findSignals(allSignals, entity, index) {
