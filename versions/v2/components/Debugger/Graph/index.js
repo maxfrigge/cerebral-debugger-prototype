@@ -11,27 +11,29 @@ import Signal from './Signal'
 class Graph extends React.Component {
   render() {
 
+    console.log(this.props.signalLog);
     const eventStream = createControllerEvents(this.props.signalLog)
-
+    console.log('events', eventStream);
     const graph = eventStream
     .reduce((graph, event) => {
       switch (event.type) {
         case 'signal_start':
           return startSignal(event, graph)
-        case 'action_start':
-          return startAction(event, graph)
-        case 'action_end':
-          return endAction(event, graph)
+        // case 'action_start':
+        //   return startAction(event, graph)
+        // case 'action_end':
+        //   return endAction(event, graph)
         case 'signal_end':
           return endSignal(event, graph)
       }
     }, {clock: 0, signals: []})
 
-    // @TODO: Get rid of that freaking window.innerWidth!!
     const signalsWidth = (graph.clock - 1) * 20 - 19
     const signalGroup = {
       transform: `translate(${-signalsWidth}px)`
     }
+
+    // console.log(graph);
 
     return (
       <div className={ `${this.props.className} ${styles.container}` }>
@@ -54,7 +56,7 @@ class Graph extends React.Component {
           className={ styles.signalContainer }
           style={signalGroup}
         >
-          <svg>
+          <svg width={window.innerWidth}>
             <g>
               {
                 graph.signals.map(
@@ -81,7 +83,6 @@ function createControllerEvents (signals) {
     return stream
   }, [])
   .sort(compareEvents)
-
   // console.log('events', result)
 
   return result
@@ -112,10 +113,10 @@ function compareEventTypes (a, b) {
 
 function startSignal (startEvent, graph) {
   const lastSignal = getLastSignal(graph)
-  if (lastSignal && lastSignal.name === startEvent.signal.name) {
-    lastSignal.count += 1
-    return graph
-  }
+  // if (lastSignal && lastSignal.name === startEvent.signal.name) {
+  //   lastSignal.count += 1
+  //   return graph
+  // }
 
   const signal = {
     id: startEvent.signal.id,
@@ -169,12 +170,12 @@ function findSignal (graph, signalId) {
 }
 
 function findRunningSignal (graph) {
-  return graph.signals.reverse().find(signal => signal.running)
+  return graph.signals.slice().find(signal => signal.running)
 }
 
 function getLastSignal (graph) {
   if (graph.signals.length) {
-    return graph.signals[0]
+    return graph.signals[graph.signals.length - 1]
   }
 
   return null
