@@ -29,14 +29,13 @@ class Graph extends React.Component {
 
     // @TODO: Get rid of that freaking window.innerWidth!!
     const signalsWidth = (graph.clock - 1) * 20 - 19
-    const scrollPos = window.innerWidth / 2 - signalsWidth - 17;
     const signalGroup = {
-      transform: `translate(${scrollPos}px, 2px)`
+      transform: `translate(${-signalsWidth}px)`
     }
 
     return (
-      <div className={styles.container}>
-        <svg width='100%' height='80px'>
+      <div className={ `${this.props.className} ${styles.container}` }>
+        <svg width='100%' height='100%'>
           <g>
             <rect
               className={ styles.nowIndicator }
@@ -50,14 +49,21 @@ class Graph extends React.Component {
               NOW
             </text>
           </g>
-          <g style={ signalGroup }>
-            {
-              graph.signals.map(
-                (signal, index) => <Signal key={signal.id} signal={signal} />
-              )
-            }
-          </g>
         </svg>
+        <div
+          className={ styles.signalContainer }
+          style={signalGroup}
+        >
+          <svg>
+            <g>
+              {
+                graph.signals.map(
+                  (signal, index) => <Signal key={signal.id} signal={signal} />
+                )
+              }
+            </g>
+          </svg>
+        </div>
       </div>
     );
   }

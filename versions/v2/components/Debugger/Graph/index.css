@@ -1,5 +1,5 @@
 .container {
-  width: 100%;
+  position: relative;
 }
 
 .nowIndicator {
@@ -16,4 +16,12 @@
   font-weight: bold;
   pointer-events: none;
   -webkit-user-select: none;
+}
+
+.signalContainer {
+  position: absolute;
+  top: 2px;
+  left: calc(50% - 17px);
+  width: 0;
+  height: 0;
 }

@@ -1,7 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+}
+
+.graph {
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #DDD;
+  margin-bottom: 10px;
+  height: 80px;
+}
+
 .signals {
   flex: 1;
   display: flex;
-  padding: 10px;
 }
 
 .list {
