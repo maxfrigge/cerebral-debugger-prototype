@@ -4,9 +4,9 @@ import styles from './index.css'
 import RoundedRect from '../common/RoundedRect'
 
 export default function Signal ({signal}) {
-  const x = signal.start * 20
+  const x = signal.start * 25
   const y = (signal.concurrency - signal.actionConcurrency) * 20
-  const width = 14 + (signal.duration - 1) * 20
+  const width = signal.duration * 20
   const height = 14 + signal.actionConcurrency * 12
 
   let rightRadius = signal.running ? 0 : 8

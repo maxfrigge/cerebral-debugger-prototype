@@ -3,6 +3,7 @@ import {Decorator as Cerebral} from 'cerebral-view-react'
 import {signalToColors} from 'common/utils';
 import styles from './index.css'
 import Signal from './Signal'
+import Scroller from './common/Scroller'
 
 @Cerebral({
   signalLog: ['debugger', 'signals'],
@@ -12,9 +13,9 @@ import Signal from './Signal'
 class Graph extends React.Component {
   render() {
 
-    console.log(this.props.signalLog);
+    // console.log(this.props.signalLog);
     const eventStream = createControllerEvents(this.props.signalLog)
-    console.log('events', eventStream);
+    // console.log('events', eventStream);
     const graph = eventStream
     .reduce((graph, event) => {
       switch (event.type) {
@@ -29,20 +30,15 @@ class Graph extends React.Component {
       }
     }, {clock: 0, signals: []})
 
-    const signalsWidth = (graph.clock - 1) * 20 - 19
-    const signalGroup = {
-      transform: `translate(${-signalsWidth}px)`
-    }
-
-    // console.log(graph);
+    const signalWidth = (graph.clock - 1) * 20  + (graph.signals.length - 1) * 10
 
     return (
       <div className={ `${this.props.className} ${styles.container}` }>
-        <svg width='100%' height='100%'>
+        <svg className={ styles.backgroundContainer }>
           <g>
             <rect
               className={ styles.nowIndicator }
-              x='50%'
+              x='50%' height='100%'
             />
             <text
               className={ styles.nowLabel }
@@ -53,9 +49,11 @@ class Graph extends React.Component {
             </text>
           </g>
         </svg>
-        <div
-          className={ styles.signalContainer }
-          style={signalGroup}
+        <Scroller
+          width='100%'
+          height='100%'
+          contentStartX='50%'
+          scrollX={ -signalWidth }
         >
           <svg width={this.props.useragent.window.width}>
             <g>
@@ -66,7 +64,7 @@ class Graph extends React.Component {
               }
             </g>
           </svg>
-        </div>
+        </Scroller>
       </div>
     );
   }
