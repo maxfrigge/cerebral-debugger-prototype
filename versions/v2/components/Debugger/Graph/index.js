@@ -6,7 +6,8 @@ import Signal from './Signal'
 
 @Cerebral({
   signalLog: ['debugger', 'signals'],
-  signalDefinitions: ['debugger', 'currentApp', 'signals']
+  signalDefinitions: ['debugger', 'currentApp', 'signals'],
+  useragent: ['useragent']
 })
 class Graph extends React.Component {
   render() {
@@ -56,7 +57,7 @@ class Graph extends React.Component {
           className={ styles.signalContainer }
           style={signalGroup}
         >
-          <svg width={window.innerWidth}>
+          <svg width={this.props.useragent.window.width}>
             <g>
               {
                 graph.signals.map(

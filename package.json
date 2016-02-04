@@ -25,10 +25,11 @@
   },
   "dependencies": {
     "baobab": "^2.2.1",
-    "cerebral": "^0.30.0",
+    "cerebral": "^0.33.21",
     "cerebral-addons": "^0.3.1",
     "cerebral-model-baobab": "^0.4.5",
-    "cerebral-view-react": "^0.10.0",
+    "cerebral-module-useragent": "github:cerebral/cerebral-module-useragent",
+    "cerebral-view-react": "^0.11.2",
     "classnames": "^2.2.3",
     "file-loader": "^0.8.5",
     "react": "^0.14.3",

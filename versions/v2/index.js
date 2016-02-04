@@ -4,14 +4,16 @@ import ReactDOM from 'react-dom';
 import Controller from 'cerebral';
 import Model from 'cerebral-model-baobab';
 import {Container} from 'cerebral-view-react';
+import Useragent from 'cerebral-module-useragent'
 
 import DebuggerModule from './modules/Debugger';
 import Debugger from './components/Debugger';
 
 const controller = Controller(Model({}));
 
-controller.modules({
-  debugger: DebuggerModule
+controller.addModules({
+  debugger: DebuggerModule,
+  useragent: Useragent()
 });
 
 export default {
