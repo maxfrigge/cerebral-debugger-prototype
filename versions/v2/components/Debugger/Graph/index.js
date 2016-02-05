@@ -2,7 +2,7 @@ import React from 'react'
 import {Decorator as Cerebral} from 'cerebral-view-react'
 import {signalToColors} from 'common/utils';
 import styles from './index.css'
-import Signal from './Signal'
+import Signals from './Signals'
 import Scroller from './common/Scroller'
 
 @Cerebral({
@@ -30,7 +30,9 @@ class Graph extends React.Component {
       }
     }, {clock: 0, signals: []})
 
+    const grapWidth = this.props.useragent.window.width - 20
     const signalWidth = (graph.clock - 1) * 20  + (graph.signals.length - 1) * 10
+    const graphScrollX = grapWidth / 2 - signalWidth
 
     return (
       <div className={ `${this.props.className} ${styles.container}` }>
@@ -49,22 +51,12 @@ class Graph extends React.Component {
             </text>
           </g>
         </svg>
-        <Scroller
-          width='100%'
-          height='100%'
-          contentStartX='50%'
-          scrollX={ -signalWidth }
-        >
-          <svg width={this.props.useragent.window.width}>
-            <g>
-              {
-                graph.signals.map(
-                  (signal, index) => <Signal key={signal.id} signal={signal} />
-                )
-              }
-            </g>
-          </svg>
-        </Scroller>
+        <Signals
+          signals={ graph.signals }
+          width={grapWidth}
+          height={80}
+          scrollX={graphScrollX}
+        />
       </div>
     );
   }
@@ -112,10 +104,10 @@ function compareEventTypes (a, b) {
 
 function startSignal (startEvent, graph) {
   const lastSignal = getLastSignal(graph)
-  // if (lastSignal && lastSignal.name === startEvent.signal.name) {
-  //   lastSignal.count += 1
-  //   return graph
-  // }
+  if (lastSignal && lastSignal.name === startEvent.signal.name) {
+    lastSignal.count += 1
+    return graph
+  }
 
   const signal = {
     id: startEvent.signal.id,

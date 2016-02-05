@@ -1,14 +1,9 @@
 import React from 'react'
-import styles from './index.css'
+import styles from './Signal.css'
 // import Action from '../Action'
 import RoundedRect from '../common/RoundedRect'
 
-export default function Signal ({signal}) {
-  const x = signal.start * 25
-  const y = (signal.concurrency - signal.actionConcurrency) * 20
-  const width = signal.duration * 20
-  const height = 14 + signal.actionConcurrency * 12
-
+export default function Signal ({signal, x, y, width, height}) {
   let rightRadius = signal.running ? 0 : 8
 
   const backgroundStyle = {
