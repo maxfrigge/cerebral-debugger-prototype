@@ -3,7 +3,7 @@ import styles from './Signal.css'
 // import Action from '../Action'
 import RoundedRect from '../common/RoundedRect'
 
-export default function Signal ({signal, x, y, width, height}) {
+export default function Signal ({signal, x, y, width, height, active}) {
   let rightRadius = signal.running ? 0 : 8
 
   const backgroundStyle = {

@@ -4,10 +4,14 @@ import {signalToColors} from 'common/utils';
 import styles from './index.css'
 import Signals from './Signals'
 
+import currentSignal from 'common/computed/currentSignal'
+
 @Cerebral({
   signalLog: ['debugger', 'signals'],
   signalDefinitions: ['debugger', 'currentApp', 'signals'],
-  useragent: ['useragent']
+  useragent: ['useragent'],
+  selectedSignal: currentSignal,
+  activeSignalPath: ['debugger', 'currentRememberedSignalPath']
 })
 class Graph extends React.Component {
   render() {
@@ -29,9 +33,15 @@ class Graph extends React.Component {
       }
     }, {clock: 0, signals: []})
 
-    const grapWidth = this.props.useragent.window.width - 20
+    const activeSignalId = this.props.activeSignalPath.join('_')
+    const activeSignalIndex = graph.signals
+    .findIndex(
+      signal => signal.signalIds.indexOf(activeSignalId) > -1
+    )
+
+    const graphWidth = this.props.useragent.window.width - 20
     const signalWidth = (graph.clock - 1) * 20  + (graph.signals.length - 1) * 10
-    const graphScrollX = grapWidth / 2 - signalWidth
+    const graphScrollX = graphWidth / 2 - 20 - (activeSignalIndex * 50)
 
     return (
       <div className={ `${this.props.className} ${styles.container}` }>
@@ -53,7 +63,9 @@ class Graph extends React.Component {
         <Signals
           className={ styles.signals }
           signals={ graph.signals }
-          width={ grapWidth }
+          activeSignalId={ activeSignalId }
+          currentSignal
+          width={ graphWidth }
           height={ 76 }
           scrollX={ graphScrollX }
         />
@@ -106,11 +118,13 @@ function startSignal (startEvent, graph) {
   const lastSignal = getLastSignal(graph)
   if (lastSignal && lastSignal.name === startEvent.signal.name) {
     lastSignal.count += 1
+    lastSignal.signalIds.push(startEvent.signal.id)
     return graph
   }
 
   const signal = {
     id: startEvent.signal.id,
+    signalIds: [startEvent.signal.id],
     start: graph.clock,
     duration: 0,
     actions: [],

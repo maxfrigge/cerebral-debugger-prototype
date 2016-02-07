@@ -5,7 +5,8 @@ export default function Signals (props) {
   const {
     className,
     width,
-    height
+    height,
+    activeSignalId
   } = props
 
   return (
@@ -21,7 +22,7 @@ export default function Signals (props) {
 }
 
 function createSignals (props) {
-  const {signals, scrollX, width} = props
+  const {signals, scrollX, width, activeSignalId} = props
 
   return signals.map(
     (signal, index) => {
@@ -29,6 +30,7 @@ function createSignals (props) {
       const y = (signal.concurrency - signal.actionConcurrency) * 20
       const signalWidth = signal.duration * 20
       const signalHeight = 14 + signal.actionConcurrency * 12
+      const active = signal.signalIds.indexOf(activeSignalId) > -1
 
       if (x + signalWidth < 0 || x > width) {
         return null
@@ -38,6 +40,7 @@ function createSignals (props) {
         key={signal.id}
         signal={signal}
         x={x} y={y}
+        active={ active }
         width={signalWidth} height={signalHeight}
       />
     }
