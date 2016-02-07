@@ -3,7 +3,6 @@ import {Decorator as Cerebral} from 'cerebral-view-react'
 import {signalToColors} from 'common/utils';
 import styles from './index.css'
 import Signals from './Signals'
-import Scroller from './common/Scroller'
 
 @Cerebral({
   signalLog: ['debugger', 'signals'],
@@ -52,10 +51,11 @@ class Graph extends React.Component {
           </g>
         </svg>
         <Signals
+          className={ styles.signals }
           signals={ graph.signals }
-          width={grapWidth}
-          height={80}
-          scrollX={graphScrollX}
+          width={ grapWidth }
+          height={ 76 }
+          scrollX={ graphScrollX }
         />
       </div>
     );

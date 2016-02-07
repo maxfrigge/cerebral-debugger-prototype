@@ -25,8 +25,7 @@
   -webkit-user-select: none;
 }
 
-.signalContainer {
-  position: absolute;
+.signals {
+  position: relative;
   top: 2px;
-  left: calc(50% - 17px);
 }

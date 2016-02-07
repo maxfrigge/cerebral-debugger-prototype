@@ -2,9 +2,17 @@ import React from 'react'
 import Signal from './Signal'
 
 export default function Signals (props) {
-  const {width, height} = props
+  const {
+    className,
+    width,
+    height
+  } = props
+
   return (
-    <svg width={ width } height={ height }>
+    <svg
+      className={ className }
+      width={ width } height={ height }
+    >
       <g>
         { createSignals(props) }
       </g>

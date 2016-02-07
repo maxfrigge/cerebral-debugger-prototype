@@ -75,7 +75,7 @@ class Signal extends React.Component {
     }
     return (
       <div className={styles.signal}>
-        <h3 className={styles.title}>{this.props.signal.name} ({this.props.signal.start})</h3>
+        <h3 className={styles.title}>{this.props.signal.name}</h3>
         <div className={styles.chain}>
           {this.props.signal.branches.map((action, index) => this.renderAction(action, index))}
         </div>
